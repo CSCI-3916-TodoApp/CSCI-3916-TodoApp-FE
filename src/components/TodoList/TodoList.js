@@ -1,7 +1,7 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import {connect} from 'react-redux';
 
-import {Button, Modal} from "react-bootstrap";
+import {Button} from "react-bootstrap";
 
 import {fetchTodos, setTodo, updateTodo, deleteTodo} from "../../actions/todoActions";
 import './TodoList.css'
@@ -19,7 +19,14 @@ class TodosList extends Component {
 
     componentDidMount() {
         const {dispatch} = this.props;
+
         dispatch(fetchTodos());
+    };
+
+    toggleDetail = () => {
+        this.setState({
+            showDetail: !this.state.showDetail
+        });
     };
 
     setSelectedTodo = (todo) => {
@@ -39,20 +46,22 @@ class TodosList extends Component {
     //     this.editSelectedTodo(newTodo);
     // };
     //
+
     editSelectedTodo = (todo) => {
         this.setSelectedTodo(todo);
 
-        this.setState( {
-            showDetail: true
-        })
+        this.setState({
+            todoDetails: todo
+        });
 
-        //TODO: Do some editing
+        this.toggleDetail();
     };
 
-    completeSelectedTodo = (todo) => {
+    toggleCompleteStatus = (todo) => {
+        let completed = todo.completed;
         let updateDetails = Object.assign({}, todo);
 
-        updateDetails["completed"] = true;
+        updateDetails["completed"] = !completed;
 
         this.updateSelectedTodo(updateDetails);
     };
@@ -63,6 +72,9 @@ class TodosList extends Component {
     };
 
     deleteSelectedTodo = (todo) => {
+
+        console.log(todo)
+
         const {dispatch} = this.props;
         dispatch(deleteTodo(todo));
     };
@@ -73,37 +85,18 @@ class TodosList extends Component {
         const Todo = props => (
             <tr align={"left"}>
                 <td className={props.todo.completed ? 'completed' : null}>{props.todo.name}</td>
+                <td className={props.todo.completed ? 'completed' : null}>{new Date(props.todo.dateCreated).toDateString()}</td>
                 <td className={props.todo.completed ? 'completed' : null}>{new Date(props.todo.dateDue).toDateString()}</td>
                 <td className={props.todo.completed ? 'completed' : null}>{props.todo.priority}</td>
-                <td className={props.todo.completed ? 'completed' : null}>{new Date(props.todo.dateCreated).toDateString()}</td>
                 <td>
-                    <EditButton todo={props.todo}/>
-                </td>
-                <td>
-                    <button onClick={()=>this.completeSelectedTodo(props.todo)}>Mark Complete</button>
-                </td>
-                <td>
-                    <button onClick={()=>this.deleteSelectedTodo(props.todo)}>Delete</button>
+                    <Button onClick={()=>this.editSelectedTodo(props.todo)}> Edit </Button>
+                    &nbsp;
+                    <Button onClick={()=>this.toggleCompleteStatus(props.todo)}>Toggle Complete Status</Button>
+                    &nbsp;
+                    <Button onClick={()=>this.deleteSelectedTodo(props.todo)}>Delete</Button>
                 </td>
             </tr>
         );
-
-        const EditButton = ({todo}) => {
-            const [show, setShow] = useState(false);
-
-            const handleClose = () => setShow(false);
-            const handleShow = () => setShow(true);
-
-            return (
-            <>
-                <Button variant="primary" onClick={handleShow}>
-                    Edit
-                </Button>
-
-                <TodoDetail showDetails={show} id={'badID'} closeDetail={handleClose} todo={todo}/>
-            </>
-            )
-        };
 
         return (
             <div>
@@ -114,10 +107,8 @@ class TodosList extends Component {
                     <tr align={"left"}>
                         <th>Name</th>
                         <th>Date Created</th>
-                        <th>Priority</th>
                         <th>Due Date</th>
-                        <th/>
-                        <th/>
+                        <th>Priority</th>
                     </tr>
                     </thead>
                     <tbody id={"tbody"}>
@@ -129,7 +120,7 @@ class TodosList extends Component {
                     </tbody>
                 </table>
 
-                <TodoDetail />
+                {this.state.showDetail ? <TodoDetail todo={this.props.selectedTodo} showDetails={this.state.showDetail} closeDetail={this.toggleDetail} /> : null }
             </div>
         )
     }
@@ -139,7 +130,8 @@ class TodosList extends Component {
 function mapStateToProps(state) {
     return {
         loggedIn: state.auth.loggedIn,
-        todos: state.todo.todos
+        todos: state.todo.todos,
+        selectedTodo: state.selectedTodo
     }
 }
 

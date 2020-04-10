@@ -4,7 +4,8 @@ import runtimeEnv from '@mars/heroku-js-runtime-env';
 function todosFetched(todos) {
     return {
         type: actionTypes.FETCH_TODOS,
-        todos: todos
+        todos: todos,
+        todo: todos[0]
     }
 }
 
@@ -47,9 +48,7 @@ export function fetchTodos() {
     const env = runtimeEnv();
 
     return dispatch => {
-        /* return fetch(`${env.REACT_APP_API_URL}/todos/`, { */
-            //TODO: Fix the username insertion 
-            return fetch(`${env.REACT_APP_API_URL}/todos/t`, {
+        return fetch(`${env.REACT_APP_API_URL}/todos/`, {
             method: 'GET',
             headers: {
                 'Authorization': localStorage.getItem('token'),
@@ -66,7 +65,7 @@ export function fetchTodos() {
                 return response.json();
             })
             .then((res) => {
-                dispatch(todoFetched(res));
+                dispatch(todosFetched(res));
             })
             .catch((e) => {
                 console.log(e)
@@ -93,7 +92,7 @@ export function fetchTodo(id) {
                 return response.json();
             })
             .then((res) => {
-                dispatch(todosFetched(res));
+                dispatch(todoFetched(res));
             })
             .catch((e) => console.log(e));
     }
@@ -113,6 +112,7 @@ export function createTodo(todo) {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
+                'Authorization': localStorage.getItem('token'),
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(todo),
@@ -140,6 +140,7 @@ export function updateTodo(todo) {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
+                'Authorization': localStorage.getItem('token'),
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(todo),
@@ -167,9 +168,10 @@ export function deleteTodo(todo) {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
+                'Authorization': localStorage.getItem('token'),
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(todo._id),
+            body: JSON.stringify(todo),
             mode: 'cors'
         })
             .then((response) => {

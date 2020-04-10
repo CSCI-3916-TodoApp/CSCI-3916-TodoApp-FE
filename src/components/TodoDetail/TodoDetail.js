@@ -2,38 +2,53 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Button, Form, Modal} from "react-bootstrap";
 
-import {fetchTodo, updateTodo} from "../../actions/todoActions";
+// import {fetchTodo, updateTodo} from "../../actions/todoActions";
 
 class TodoDetail extends Component {
 
-    componentDidMount() {
-        const {dispatch} = this.props;
-        if (!this.props.selectedTodo)
-            dispatch(fetchTodo(this.props.id));
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            todoDetails: {
+                _id: 'test',
+                name: 'test',
+                priority: 'test',
+                dateCreated: Date(),
+                dateDue: 'test',
+                completed: false,
+                order: 0
+            }
+        };
+
+        this.handleSubmitButtonClick = this.handleSubmitButtonClick.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
-    // updateTodoDetails = (event) => {
-    //     let updateDetails = Object.assign({}, this.props.selectedTodo);
-    //
-    //     updateDetails[event.target.id] = event.target.value;
-    //
-    //     this.props.setSelectedTodo(updateDetails);
-    // };
+    handleChange(event) {
+        let updateDetails = Object.assign({}, this.state.todoDetails);
 
-    // handleSubmitButtonClick() {
-    //     const {dispatch} = this.props;
-    //     dispatch(updateTodo(this.props.selectedTodo))
-    //
-    //     this.setState({
-    //             badBool: false
-    //         }
-    //     )
-    // }
+        updateDetails[event.target.id] = event.target.value;
+
+        console.log("handleChange")
+
+        this.setState({
+            todoDetails: updateDetails
+        });
+    }
+
+    handleSubmitButtonClick() {
+        //TODO: CALL updateTodo from here
+        // const {dispatch} = this.props;
+        // dispatch(updateTodo(this.props.selectedTodo))
+
+        this.props.closeDetail()
+    };
 
     render() {
         const TodoDetails = ({todo}) => {
 
-            if (todo === null) {
+            if (todo === undefined) {
                 return (
                     <div>Select a todo from the todo list to see details.</div>
                 )
@@ -43,31 +58,34 @@ class TodoDetail extends Component {
                     <p align={"center"}>Todo Created: {new Date(todo.dateCreated).toDateString()}</p>
 
                     <Form>
-                        <Form.Group controlId={"name"}>
+                        <Form.Group controlId="name">
                             <Form.Label>Name</Form.Label>
-                            <Form.Control onChange={this.updateTodoDetails} value={todo.name}
-                                          type="name" placeholder="TodoDetail Name"/>
+                            <Form.Control
+                                onChange={this.handleChange}
+                                value={todo.name}
+                                name="name"
+                                type="text"
+                                placeholder="TodoDetail Name"
+                            />
                         </Form.Group>
 
-                        <Form.Group controlId="priority">
+                        <Form.Group controlId="priority" name="priority">
                             <Form.Label>Priority</Form.Label>
-                            <Form.Control as="select" onChange={this.updateTodoDetails} value={todo.priority}>
+                            <Form.Control as="select" onChange={this.handleChange} value={todo.priority}>
                                 <option>Low</option>
                                 <option>Med</option>
                                 <option>High</option>
                             </Form.Control>
                         </Form.Group>
 
-                        <Form.Group controlId={"dateDue"}>
+                        <Form.Group controlId="dateDue" name="dateDue">
                             <Form.Label>Due Date</Form.Label>
-                            <Form.Control onChange={this.updateTodoDetails} value={todo.dateDue}
+                            <Form.Control onChange={this.handleChange} value={todo.dateDue}
                                           type="date" placeholder="Due Date"/>
                         </Form.Group>
 
-                        <Form.Group controlID={"completed"}>
-                            <Form.Check onChange={this.updateTodoDetails} value={todo.completed}
-                                        checked={todo.completed} type={"checkbox"}
-                                        label={"Completed"}/>
+                        <Form.Group controlId="completed" name="completed">
+                            <Form.Check id="checkbox" onChange={this.handleChange} value={todo.completed} label={"Completed"} checked={todo.completed}/>
                         </Form.Group>
 
                         <br/>
@@ -91,7 +109,7 @@ class TodoDetail extends Component {
                     </Modal.Header>
 
                     <Modal.Body>
-                        <TodoDetails todo={this.props.todo}/>
+                     <TodoDetails todo={this.state.todoDetails}/>
                     </Modal.Body>
 
                     <Modal.Footer>
@@ -110,10 +128,12 @@ class TodoDetail extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
+
     return {
         loggedIn: state.auth.loggedIn,
-        selectedTodo: state.todo.selectedTodo
+        selectedTodo: state.todo.selectedTodo,
+        todo: ownProps.todo
     }
 };
 
