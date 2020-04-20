@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 
-import {Button} from "react-bootstrap";
-
 import {fetchTodos, setTodo, updateTodo, deleteTodo} from "../../actions/todoActions";
 import './TodoList.css'
 import TodoDetail from "../TodoDetail/TodoDetail";
+
+// Source Icons
+import editIcon from "../../assets/images/editIcon.png"
+import compIcon from "../../assets/images/compIcon.png"
+import delIcon from "../../assets/images/delIcon.png"
 
 class TodosList extends Component {
 
@@ -84,16 +87,37 @@ class TodosList extends Component {
 
         const Todo = props => (
             <tr align={"left"}>
+                <td className={props.todo.completed ? 'completed' : null}>{props.todo.order}</td>
                 <td className={props.todo.completed ? 'completed' : null}>{props.todo.name}</td>
                 <td className={props.todo.completed ? 'completed' : null}>{new Date(props.todo.dateCreated).toDateString()}</td>
                 <td className={props.todo.completed ? 'completed' : null}>{new Date(props.todo.dateDue).toDateString()}</td>
                 <td className={props.todo.completed ? 'completed' : null}>{props.todo.priority}</td>
+                
                 <td>
-                    <Button onClick={()=>this.editSelectedTodo(props.todo)}> Edit </Button>
-                    &nbsp;
-                    <Button onClick={()=>this.toggleCompleteStatus(props.todo)}>Toggle Complete Status</Button>
-                    &nbsp;
-                    <Button onClick={()=>this.deleteSelectedTodo(props.todo)}>Delete</Button>
+                    <img
+                        alt="Edit Todo Icon"
+                        src={editIcon}
+                        width="45"
+                        height="45"
+                        className={"d-inline-block align-top"}
+                        onClick={()=>this.editSelectedTodo(props.todo)}
+                    />
+                    <img
+                        alt="Complete Todo Icon"
+                        src={compIcon}
+                        width="45"
+                        height="45"
+                        className={"d-inline-block align-top"}
+                        onClick={()=>this.toggleCompleteStatus(props.todo)}
+                    />
+                    <img
+                        alt="Delete Todo Icon"
+                        src={delIcon}
+                        width="45"
+                        height="45"
+                        className={"d-inline-block align-top"}
+                        onClick={()=>this.deleteSelectedTodo(props.todo)}
+                    />
                 </td>
             </tr>
         );
@@ -102,9 +126,10 @@ class TodosList extends Component {
             <div>
                 <br/>
                 <h3>Todos List</h3>
-                <table align="center" className="table table-striped" style={{ marginTop: 20, width:"80%" }} >
+                <table align="center" className="table table-striped" style={{ marginTop: 10, width:"60%" }} >
                     <thead>
                     <tr align={"left"}>
+                        <th>Order</th>
                         <th>Name</th>
                         <th>Date Created</th>
                         <th>Due Date</th>
@@ -113,7 +138,8 @@ class TodosList extends Component {
                     </thead>
                     <tbody id={"tbody"}>
 
-                    { this.props.todos.map((currentTodo, i) =>
+                    { this.props.todos.map(
+                        (currentTodo, i) =>
                         <Todo todo={currentTodo} key={i}/>
                     )}
                     

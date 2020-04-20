@@ -27,8 +27,8 @@ class TodoHeader extends Component {
                         <img
                             alt="To-Do App Logo"
                             src={logo}
-                            width="30"
-                            height="30"
+                            width="45"
+                            height="45"
                             className={"d-inline-block align-top"}
                         />{'  '}
                         Todo App

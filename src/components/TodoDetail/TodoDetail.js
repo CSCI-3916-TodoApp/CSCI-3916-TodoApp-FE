@@ -38,7 +38,7 @@ class TodoDetail extends Component {
     }
 
     handleSubmitButtonClick() {
-        //TODO: CALL updateTodo from here
+        // TODO: CALL updateTodo from here
         // const {dispatch} = this.props;
         // dispatch(updateTodo(this.props.selectedTodo))
 
@@ -84,10 +84,11 @@ class TodoDetail extends Component {
                                           type="date" placeholder="Due Date"/>
                         </Form.Group>
 
-                        <Form.Group controlId="completed" name="completed">
-                            <Form.Check id="checkbox" onChange={this.handleChange} value={todo.completed} label={"Completed"} checked={todo.completed}/>
+                        <Form.Group controlId="order" name="order">
+                            <Form.Label>Order</Form.Label>
+                            <Form.Control onChange={this.handleChange} value={todo.order}
+                                          type="number" placeholder="0"/>
                         </Form.Group>
-
                         <br/>
                     </Form>
                 </div>
