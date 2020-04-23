@@ -82,12 +82,14 @@ class TodosList extends Component {
         dispatch(deleteTodo(todo));
     };
 
+  
     //Need to update - Do so using the vartiables they're returning. 
     render() {
 
-        const Todo = props => (
+
+        const Todo = props => ( 
             <tr align={"left"}>
-                <td className={props.todo.completed ? 'completed' : null}>{props.todo.order}</td>
+                <td className={props.todo.completed ? 'completed' : null}>{props.qwop+1}</td>
                 <td className={props.todo.completed ? 'completed' : null}>{props.todo.name}</td>
                 <td className={props.todo.completed ? 'completed' : null}>{new Date(props.todo.dateCreated).toDateString()}</td>
                 <td className={props.todo.completed ? 'completed' : null}>{new Date(props.todo.dateDue).toDateString()}</td>
@@ -121,7 +123,7 @@ class TodosList extends Component {
                 </td>
             </tr>
         );
-
+        
         return (
             <div>
                 <br/>
@@ -137,10 +139,10 @@ class TodosList extends Component {
                     </tr>
                     </thead>
                     <tbody id={"tbody"}>
-
+                    
                     { this.props.todos.map(
-                        (currentTodo, i) =>
-                        <Todo todo={currentTodo} key={i}/>
+                        (currentTodo, i) => 
+                        <Todo todo={currentTodo} qwop={i}/>
                     )}
                     
                     </tbody>

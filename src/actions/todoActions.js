@@ -65,7 +65,8 @@ export function fetchTodos() {
                 return response.json();
             })
             .then((res) => {
-                dispatch(todosFetched(res));
+                res.sort(function(a,b){return a.order-b.order}); //Sort the array before it's passed to dispatch
+                dispatch(todosFetched(res)); //Sets the Todo array
             })
             .catch((e) => {
                 console.log(e)
