@@ -1,23 +1,22 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-
+import {Link} from "react-router-dom";
 import {fetchTodos, setTodo, updateTodo, deleteTodo} from "../../actions/todoActions";
 import './TodoList.css'
-import TodoDetail from "../TodoDetail/TodoDetail";
 
 // Source Icons
-import editIcon from "../../assets/images/editIcon.png"
-import compIcon from "../../assets/images/compIcon.png"
-import delIcon from "../../assets/images/delIcon.png"
+import editIcon from "../../assets/images/editPencil.png"
+import compIcon from "../../assets/images/checkCircle-checked.png"
+//import incompleteIcon from "../../assets/images/checkCircle.png"
+import delIcon from "../../assets/images/delete.png"
+import plusIcon from "../../assets/images/plusIcon.png";
 
 class TodosList extends Component {
 
     constructor(props) {
         super(props);
 
-        this.state = {
-            showDetail: false
-        }
+        this.toggleDetail = this.toggleDetail.bind(this);
     }
 
     componentDidMount() {
@@ -37,27 +36,19 @@ class TodosList extends Component {
         dispatch(setTodo(todo));
     };
 
-    // createNewTodo = () => {
-    //     let newTodo = {
-    //         name: '',
-    //         priority: null,
-    //         dateDue: Date(),
-    //         dateCreated: Date(),
-    //         completed: false
-    //     }
-    //
-    //     this.editSelectedTodo(newTodo);
-    // };
-    //
+    createNewTodo = () => {
+        let newTodo = {
+            name: '',
+            priority: "Low",
+            dateDue: null,
+            dateCreated: new Date().toISOString(),
+            completed: false,
+            order: 0
+        };
 
-    editSelectedTodo = (todo) => {
-        this.setSelectedTodo(todo);
+        this.setSelectedTodo(newTodo);
 
-        this.setState({
-            todoDetails: todo
-        });
-
-        this.toggleDetail();
+        this.props.history.push("/details/newTodo")
     };
 
     toggleCompleteStatus = (todo) => {
@@ -75,51 +66,55 @@ class TodosList extends Component {
     };
 
     deleteSelectedTodo = (todo) => {
-
-        console.log(todo)
-
         const {dispatch} = this.props;
         dispatch(deleteTodo(todo));
     };
 
-  
-    //Need to update - Do so using the vartiables they're returning. 
+    getDateWithTimeZoneOffset = (date) => {
+        const offset = new Date(date).getTimezoneOffset();
+        var modifiedDate = new Date(date).getTime() + (offset*60*1000)
+        return new Date(modifiedDate).toISOString().split('T')[0]
+    };
+
     render() {
 
 
         const Todo = props => ( 
             <tr align={"left"}>
-                <td className={props.todo.completed ? 'completed' : null}>{props.qwop+1}</td>
+                <td className={props.todo.completed ? 'completed' : null}>{props.indexValue+1}</td>
                 <td className={props.todo.completed ? 'completed' : null}>{props.todo.name}</td>
                 <td className={props.todo.completed ? 'completed' : null}>{new Date(props.todo.dateCreated).toDateString()}</td>
-                <td className={props.todo.completed ? 'completed' : null}>{new Date(props.todo.dateDue).toDateString()}</td>
+                <td className={props.todo.completed ? 'completed' : null}>{props.todo.dateDue ? this.getDateWithTimeZoneOffset(props.todo.dateDue) : 'N/A'}</td>
                 <td className={props.todo.completed ? 'completed' : null}>{props.todo.priority}</td>
                 
                 <td>
-                    <img
-                        alt="Edit Todo Icon"
-                        src={editIcon}
-                        width="45"
-                        height="45"
-                        className={"d-inline-block align-top"}
-                        onClick={()=>this.editSelectedTodo(props.todo)}
-                    />
-                    <img
-                        alt="Complete Todo Icon"
-                        src={compIcon}
-                        width="45"
-                        height="45"
-                        className={"d-inline-block align-top"}
-                        onClick={()=>this.toggleCompleteStatus(props.todo)}
-                    />
-                    <img
-                        alt="Delete Todo Icon"
-                        src={delIcon}
-                        width="45"
-                        height="45"
-                        className={"d-inline-block align-top"}
-                        onClick={()=>this.deleteSelectedTodo(props.todo)}
-                    />
+                    <Link to={"/details/" + props.todo._id} onClick={()=>this.setSelectedTodo(props.todo)}>
+                        <img
+                            alt="Edit Todo Icon"
+                            src={editIcon}
+                            className={"tableButtonImage"}
+                        />
+                    </Link>
+                </td>
+                <td>
+                    <button className={"tableButton"}>
+                        <img
+                            alt="Complete Todo Icon"
+                            src={compIcon}
+                            className={"tableButtonImage"}
+                            onClick={()=>this.toggleCompleteStatus(props.todo)}
+                        />
+                    </button>
+                </td>
+                <td>
+                    <button className={"tableButton"}>
+                        <img
+                            alt="Delete Todo Icon"
+                            src={delIcon}
+                            className={"tableButtonImage"}
+                            onClick={()=>this.deleteSelectedTodo(props.todo)}
+                        />
+                    </button>
                 </td>
             </tr>
         );
@@ -136,19 +131,31 @@ class TodosList extends Component {
                         <th>Date Created</th>
                         <th>Due Date</th>
                         <th>Priority</th>
+                        <th>Edit</th>
+                        <th>Complete</th>
+                        <th>Delete</th>
                     </tr>
                     </thead>
                     <tbody id={"tbody"}>
                     
-                    { this.props.todos.map(
-                        (currentTodo, i) => 
-                        <Todo todo={currentTodo} qwop={i}/>
-                    )}
+                    {
+                        this.props.todos.map(
+                            (currentTodo, i) =>
+                                <Todo todo={currentTodo} indexValue={i} key={i}/>
+                        )
+                    }
                     
                     </tbody>
                 </table>
 
-                {this.state.showDetail ? <TodoDetail todo={this.props.selectedTodo} showDetails={this.state.showDetail} closeDetail={this.toggleDetail} /> : null }
+                <button className={"addButton"}>
+                    <img
+                        className={"addButtonImage"}
+                        alt="createNewTodo"
+                        src={plusIcon}
+                        onClick={this.createNewTodo}
+                    />
+                </button>
             </div>
         )
     }

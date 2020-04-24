@@ -4,9 +4,10 @@ import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
 
 import {logoutUser} from "../../actions/authActions";
+import {clearTodos} from "../../actions/todoActions";
 import Authentication from "../Authentication/Authentication";
 
-import logo from "../../assets/images/checkmark.png";
+import logo from "../../assets/images/checkCircle-logo.png";
 
 class TodoHeader extends Component {
     constructor(props) {
@@ -16,6 +17,7 @@ class TodoHeader extends Component {
     }
 
     logout() {
+        this.props.dispatch(clearTodos());
         this.props.dispatch(logoutUser());
     }
 
