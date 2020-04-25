@@ -1,4 +1,4 @@
-import {todoActionTypes as todoConstants} from '../constants'
+import {todoActionTypes as todoConstants} from '../constants';
 
 const initialState = {
     todos: [],
@@ -20,11 +20,11 @@ export default (state = initialState, action) => {
         case todoConstants.UPDATE_TODO:
             let todoIndex = state.todos.map(function(x) {return x._id; }).indexOf(action.selectedTodo._id);
 
-            updated['selectedTodo'] = action.selectedTodo
+            updated['selectedTodo'] = action.selectedTodo;
 
             updated['todos'] = state.todos.map((todo, index) => {
                 if (index !== todoIndex) {
-                    return todo
+                    return todo;
                 }
                 return {
                     ...action.selectedTodo
@@ -32,20 +32,23 @@ export default (state = initialState, action) => {
             });
             return updated;
 
-
         case todoConstants.CREATE_TODO:
             updated['selectedTodo'] = action.selectedTodo;
-            updated['todos'] = action.todos.splice();
+            updated['todos'] = state.todos.splice(action.selectedTodo);
             return updated;
         case todoConstants.DELETE_TODO:
             let index = state.todos.map(function(x) {return x._id; }).indexOf(action.selectedTodo._id);
             let deletedTodo = state.todos[index];
             updated['todos'] = state.todos.filter(todo  => todo !== deletedTodo)
-            //updated['todos'] = state.todos.splice(deletedTodo, 1)
-
             updated['selectedTodo'] = state.todos[0];
 
             return updated;
+
+        case todoConstants.CLEAR_TODOS:
+            updated['todos'] = [];
+            updated['selectedTodo'] = null;
+            return updated;
+
         default:
             return state;
     }

@@ -44,6 +44,14 @@ function todoDeleted(todo) {
     }
 }
 
+function todosCleared(){
+    return {
+        type: actionTypes.CLEAR_TODOS,
+        todos: [],
+        selectedTodo: null
+    }
+}
+
 export function fetchTodos() {
     const env = runtimeEnv();
 
@@ -187,4 +195,10 @@ export function deleteTodo(todo) {
             .catch((e) => console.log(e));
     }
 
+}
+
+export function clearTodos() {
+    return dispatch => {
+        dispatch(todosCleared());
+    }
 }

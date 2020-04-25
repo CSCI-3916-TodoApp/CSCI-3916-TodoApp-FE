@@ -1,5 +1,6 @@
 import {authActionTypes as actionTypes} from '../constants';
 import runtimeEnv from '@mars/heroku-js-runtime-env';
+import {fetchTodos} from './todoActions';
 
 function userLoggedIn(username){
     return {
@@ -36,6 +37,7 @@ export function submitLogin(data){
                 localStorage.setItem('token', res.token);
 
                 dispatch(userLoggedIn(data.username));
+                dispatch(fetchTodos());
             })
             .catch( (e) => console.log(e) );
     }

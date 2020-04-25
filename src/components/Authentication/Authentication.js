@@ -4,7 +4,7 @@ import {Button, ButtonGroup, Form, Modal, Row} from "react-bootstrap";
 
 import {submitLogin, submitRegister} from '../../actions/authActions';
 
-import logo from "../../assets/images/checkmark.png";
+import logo from "../../assets/images/checkCircle-logo.png";
 
 class Authentication extends Component {
 
@@ -57,7 +57,7 @@ class Authentication extends Component {
     }
 
     login(){
-        this.props.dispatch(submitLogin(this.state.userDetails))
+        this.props.dispatch(submitLogin(this.state.userDetails));
     }
 
     updateUserDetails = (event) => {
@@ -72,9 +72,11 @@ class Authentication extends Component {
 
     resetUserDetails() {
         this.setState({
-            username: '',
-            email: '',
-            password: ''
+            userDetails: {
+                username: '',
+                name: '',
+                password: ''
+            }
         })
     }
 
