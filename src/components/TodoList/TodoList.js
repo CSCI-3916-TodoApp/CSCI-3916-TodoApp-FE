@@ -122,7 +122,7 @@ class TodosList extends Component {
         return (
             <div>
                 <br/>
-                <h3>Todos List</h3>
+                <h3>Todo List</h3>
                 <table align="center" className="table table-striped" style={{ marginTop: 10, width:"60%" }} >
                     <thead>
                     <tr align={"left"}>
