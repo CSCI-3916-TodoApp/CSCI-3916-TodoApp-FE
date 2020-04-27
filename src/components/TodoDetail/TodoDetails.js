@@ -20,7 +20,7 @@ class TodoDetail extends Component {
                 user: ["ab"],
                 order: 0
             }
-        }
+        };
 
         this.handleSubmitButtonClick = this.handleSubmitButtonClick.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -56,7 +56,9 @@ class TodoDetail extends Component {
         } else {
             dispatch(updateTodo(this.state.todoDetails))
         }
-    };
+
+        this.props.history.push('/');
+    }
 
     getDateWithTimeZoneOffset = (date) => {
         const offset = new Date(date).getTimezoneOffset();
@@ -65,34 +67,14 @@ class TodoDetail extends Component {
     };
 
     render() {
-        const DetailsWrapper = ({todo}) => {
+        let todo = this.state.todoDetails;
 
-            if (!todo) {
-                return (
-                    <div>
-                        <br/>
-                        <br/>
-                        <h1>No Todo Selected</h1>
-
-                        <br/>
-                        <br/>
-
-                        <Button
-                            variant="danger"
-                            onClick={event => window.location.href='/'}
-                        >
-                            Return to Todo List
-                        </Button>
-
-                    </div>
-                )
-            }
-
-            return (
+        return (
+            <div>
                 <div>
                     <h1>Todo Details</h1>
                     <div align="center">
-                        <p>Todo Created: {todo.dateCreated ? this.getDateWithTimeZoneOffset(todo.dateCreated) : ''}</p>
+                        <p>Todo Created: {todo !== null && todo.dateCreated ? this.getDateWithTimeZoneOffset(todo.dateCreated) : ''}</p>
 
                         <br/>
                         <br/>
@@ -103,7 +85,7 @@ class TodoDetail extends Component {
                                 <Form.Label>Name</Form.Label>
                                 <Form.Control
                                     onChange={this.handleChange}
-                                    value={todo.name}
+                                    value={todo !== null && todo.name ? todo.name : ''}
                                     name="name"
                                     type="text"
                                     placeholder="TodoDetail Name"
@@ -112,7 +94,7 @@ class TodoDetail extends Component {
 
                             <Form.Group controlId="priority" name="priority">
                                 <Form.Label>Priority</Form.Label>
-                                <Form.Control as="select" onChange={this.handleChange} value={todo.priority ? todo.priority : "Low"}>
+                                <Form.Control as="select" onChange={this.handleChange} value={todo !== null && todo.priority ? todo.priority : "Low"}>
                                     <option>Low</option>
                                     <option>Med</option>
                                     <option>High</option>
@@ -121,7 +103,7 @@ class TodoDetail extends Component {
 
                             <Form.Group controlId="dateDue" name="dateDue">
                                 <Form.Label>Due Date</Form.Label>
-                                <Form.Control onChange={this.handleChange} value={todo.dateDue ? this.getDateWithTimeZoneOffset(todo.dateDue) : ''}
+                                <Form.Control onChange={this.handleChange} value={todo !== null && todo.dateDue ? this.getDateWithTimeZoneOffset(todo.dateDue) : ''}
                                               type="date" placeholder="Due Date"/>
                             </Form.Group>
 
@@ -132,7 +114,7 @@ class TodoDetail extends Component {
                     <>
                         <Button
                             variant="danger"
-                            onClick={event => window.location.href='/'}
+                            onClick={event => this.props.history.push('/')}
                         >
                             Return to Todo List
                         </Button>
@@ -146,20 +128,17 @@ class TodoDetail extends Component {
                         </Button>
                     </>
                 </div>
-            )
-        };
 
-        return (
-        <div>
-            {this.props.loggedIn
-                ? <DetailsWrapper todo={this.state.todoDetails}/>
-                : <Redirect to={{
-                    pathname: '/',
-                    state: {from: this.props.location}
-                }}/>
-            }
 
-        </div>
+                {this.props.loggedIn
+                    ? null
+                    : <Redirect to={{
+                        pathname: '/',
+                        state: {from: this.props.location}
+                    }}/>
+                }
+
+            </div>
         )
     }
 }
