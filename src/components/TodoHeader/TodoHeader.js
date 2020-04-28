@@ -3,9 +3,9 @@ import {Navbar, Nav} from 'react-bootstrap';
 import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
 
+import Authentication from "../Authentication/Authentication";
 import {logoutUser} from "../../actions/authActions";
 import {clearTodos} from "../../actions/todoActions";
-import Authentication from "../Authentication/Authentication";
 
 import logo from "../../assets/images/checkCircle-logo.png";
 

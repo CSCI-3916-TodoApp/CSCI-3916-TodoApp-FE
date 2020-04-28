@@ -28,6 +28,7 @@ export function submitLogin(data){
             mode: 'cors'})
             .then( (response) => {
                 if (!response.ok) {
+                    alert("Login Failed.");
                     throw Error(response.statusText);
                 }
                 return response.json();
@@ -56,7 +57,7 @@ export function submitRegister(data){
             mode: 'cors'})
             .then( (response) => {
                 if (!response.ok) {
-                    alert("User already exists!");
+                    alert("That username is unavailable. Please choose another.");
                     throw Error(response.statusText);
                 }
                 return response.json();

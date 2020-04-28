@@ -4,7 +4,6 @@ import {Link} from "react-router-dom";
 import {fetchTodos, setTodo, updateTodo, deleteTodo} from "../../actions/todoActions";
 import './TodoList.css'
 
-// Source Icons
 import editIcon from "../../assets/images/editPencil.png"
 import compIcon from "../../assets/images/checkCircle-checked.png"
 //import incompleteIcon from "../../assets/images/checkCircle.png"
@@ -48,7 +47,7 @@ class TodosList extends Component {
 
         this.setSelectedTodo(newTodo);
 
-        this.props.history.push("/details/newTodo")
+        this.props.history.push("/details/NewTodo")
     };
 
     toggleCompleteStatus = (todo) => {
@@ -72,8 +71,8 @@ class TodosList extends Component {
 
     getDateWithTimeZoneOffset = (date) => {
         const offset = new Date(date).getTimezoneOffset();
-        var modifiedDate = new Date(date).getTime() + (offset*60*1000)
-        return new Date(modifiedDate).toISOString().split('T')[0]
+        let modifiedDate = new Date(date).getTime() + (offset * 60 * 1000);
+        return new Date(modifiedDate).toISOString().split('T')[0];
     };
 
     render() {
@@ -87,7 +86,7 @@ class TodosList extends Component {
                 <td className={props.todo.completed ? 'completed' : null}>{props.todo.dateDue ? this.getDateWithTimeZoneOffset(props.todo.dateDue) : 'N/A'}</td>
                 <td className={props.todo.completed ? 'completed' : null}>{props.todo.priority}</td>
                 
-                <td>
+                <td align={"center"}>
                     <Link to={"/details/" + props.todo._id} onClick={()=>this.setSelectedTodo(props.todo)}>
                         <img
                             alt="Edit Todo Icon"
@@ -96,7 +95,7 @@ class TodosList extends Component {
                         />
                     </Link>
                 </td>
-                <td>
+                <td align={"center"}>
                     <button className={"tableButton"}>
                         <img
                             alt="Complete Todo Icon"
@@ -106,7 +105,7 @@ class TodosList extends Component {
                         />
                     </button>
                 </td>
-                <td>
+                <td align={"center"}>
                     <button className={"tableButton"}>
                         <img
                             alt="Delete Todo Icon"
@@ -123,7 +122,7 @@ class TodosList extends Component {
             <div>
                 <br/>
                 <h3>Todo List</h3>
-                <table align="center" className="table table-striped" style={{ marginTop: 10, width:"60%" }} >
+                <table align="center" className="table table-striped" style={{ marginTop: 10, width:"80%" }} >
                     <thead>
                     <tr align={"left"}>
                         <th>Order</th>
@@ -131,9 +130,9 @@ class TodosList extends Component {
                         <th>Date Created</th>
                         <th>Due Date</th>
                         <th>Priority</th>
-                        <th>Edit</th>
-                        <th>Complete</th>
-                        <th>Delete</th>
+                        <th className={"center"}>Edit</th>
+                        <th className={"center"}>Complete</th>
+                        <th className={"center"}>Delete</th>
                     </tr>
                     </thead>
                     <tbody id={"tbody"}>
