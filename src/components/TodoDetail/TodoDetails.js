@@ -17,7 +17,7 @@ class TodoDetail extends Component {
                 dateDue: null,
                 priority: "Low",
                 completed: false,
-                user: ["ab"],
+                user: '',
                 order: 0
             }
         };
@@ -49,7 +49,10 @@ class TodoDetail extends Component {
     handleSubmitButtonClick() {
         const {dispatch} = this.props;
 
-        console.log(this.state.todoDetails._id);
+        if (this.state.todoDetails === null || this.state.todoDetails.name === '') {
+            alert("Please enter a Todo name before submitting.");
+            return;
+        }
 
         if (this.state.todoDetails._id === undefined) {
             dispatch(createTodo(this.state.todoDetails))
@@ -62,9 +65,8 @@ class TodoDetail extends Component {
 
     getDateWithTimeZoneOffset = (date) => {
         const offset = new Date(date).getTimezoneOffset();
-        var modifiedDate = new Date(date).getTime() + (offset*60*1000)
-        console.log("get date");
-        return new Date(modifiedDate).toISOString().split('T')[0]
+        let modifiedDate = new Date(date).getTime() + (offset * 60 * 1000);
+        return new Date(modifiedDate).toISOString().split('T')[0];
     };
 
     render() {
@@ -75,7 +77,7 @@ class TodoDetail extends Component {
                 <div>
                     <h1>Todo Details</h1>
                     <div align="center">
-                        <p>Todo Created: {todo !== null && todo.dateCreated ? this.getDateWithTimeZoneOffset(todo.dateCreated) : ''}</p>
+                        <p>Todo Created: {todo !== null && todo.dateCreated ? this.getDateWithTimeZoneOffset(todo.dateCreated) : this.getDateWithTimeZoneOffset(new Date())}</p>
 
                         <br/>
                         <br/>
@@ -115,7 +117,7 @@ class TodoDetail extends Component {
                     <>
                         <Button
                             variant="danger"
-                            onClick={event => this.props.history.push('/')}
+                            onClick={() => this.props.history.push('/')}
                         >
                             Return to Todo List
                         </Button>

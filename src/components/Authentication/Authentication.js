@@ -137,8 +137,6 @@ class Authentication extends Component {
                         >
                             {this.state.toggleReg ? 'Register' : 'Go To Tasks'}
                         </Button>
-                        {/*TODO: if login/register fails, the button should wiggle.*/}
-                        {/*TODO: If it succeeds, it should dismiss and return to parent task.*/}
                     </Modal.Footer>
                 </Modal>
             </div>
