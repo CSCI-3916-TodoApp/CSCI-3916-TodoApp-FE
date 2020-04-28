@@ -63,6 +63,7 @@ class TodoDetail extends Component {
     getDateWithTimeZoneOffset = (date) => {
         const offset = new Date(date).getTimezoneOffset();
         var modifiedDate = new Date(date).getTime() + (offset*60*1000)
+        console.log("get date");
         return new Date(modifiedDate).toISOString().split('T')[0]
     };
 
