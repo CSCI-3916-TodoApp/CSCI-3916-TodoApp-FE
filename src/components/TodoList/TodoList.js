@@ -83,7 +83,7 @@ class TodosList extends Component {
             <tr align={"left"}>
                 <td className={props.todo.completed ? 'completed' : null}>{props.indexValue+1}</td>
                 <td className={props.todo.completed ? 'completed' : null}>{props.todo.name}</td>
-                <td className={props.todo.completed ? 'completed' : null}>{new Date(props.todo.dateCreated).toDateString()}</td>
+                <td className={props.todo.completed ? 'completed' : null}>{this.getDateWithTimeZoneOffset(new Date(props.todo.dateCreated))}</td>
                 <td className={props.todo.completed ? 'completed' : null}>{props.todo.dateDue ? this.getDateWithTimeZoneOffset(props.todo.dateDue) : 'N/A'}</td>
                 <td className={props.todo.completed ? 'completed' : null}>{props.todo.priority}</td>
                 
