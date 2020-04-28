@@ -56,7 +56,7 @@ export function submitRegister(data){
             mode: 'cors'})
             .then( (response) => {
                 if (!response.ok) {
-                    alert("User already exit!!");
+                    alert("User already exists!");
                     throw Error(response.statusText);
                 }
                 return response.json();
