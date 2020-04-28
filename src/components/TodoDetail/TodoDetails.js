@@ -49,6 +49,11 @@ class TodoDetail extends Component {
     handleSubmitButtonClick() {
         const {dispatch} = this.props;
 
+        if (this.state.todoDetails === null || this.state.todoDetails.name === '') {
+            alert("Please enter a Todo name before submitting.");
+            return;
+        }
+
         if (this.state.todoDetails._id === undefined) {
             dispatch(createTodo(this.state.todoDetails))
         } else {
@@ -72,12 +77,12 @@ class TodoDetail extends Component {
                 <div>
                     <h1>Todo Details</h1>
                     <div align="center">
-                        <p>Todo Created: {todo !== null && todo.dateCreated ? this.getDateWithTimeZoneOffset(todo.dateCreated) : ''}</p>
+                        <p>Todo Created: {todo !== null && todo.dateCreated ? this.getDateWithTimeZoneOffset(todo.dateCreated) : this.getDateWithTimeZoneOffset(new Date())}</p>
 
                         <br/>
                         <br/>
 
-                        <Form style={{ marginTop: 10, width:"80%"}}>
+                        <Form style={{ marginTop: 10, width:"60%"}}>
 
                             <Form.Group controlId="name">
                                 <Form.Label>Name</Form.Label>
