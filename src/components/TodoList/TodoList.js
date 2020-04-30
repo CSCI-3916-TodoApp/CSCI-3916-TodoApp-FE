@@ -6,7 +6,7 @@ import './TodoList.css'
 
 import editIcon from "../../assets/images/editPencil.png"
 import compIcon from "../../assets/images/checkCircle-checked.png"
-//import incompleteIcon from "../../assets/images/checkCircle.png"
+import incoIcon from "../../assets/images/checkCircle.png"
 import delIcon from "../../assets/images/delete.png"
 import plusIcon from "../../assets/images/plusIcon.png";
 
@@ -80,7 +80,6 @@ class TodosList extends Component {
 
         const Todo = props => ( 
             <tr align={"left"}>
-                <td className={props.todo.completed ? 'completed' : null}>{props.indexValue+1}</td>
                 <td className={props.todo.completed ? 'completed' : null}>{props.todo.name}</td>
                 <td className={props.todo.completed ? 'completed' : null}>{this.getDateWithTimeZoneOffset(new Date(props.todo.dateCreated))}</td>
                 <td className={props.todo.completed ? 'completed' : null}>{props.todo.dateDue ? this.getDateWithTimeZoneOffset(props.todo.dateDue) : 'N/A'}</td>
@@ -99,7 +98,7 @@ class TodosList extends Component {
                     <button className={"tableButton"}>
                         <img
                             alt="Complete Todo Icon"
-                            src={compIcon}
+                            src={props.todo.completed ? (compIcon) :(incoIcon)}
                             className={"tableButtonImage"}
                             onClick={()=>this.toggleCompleteStatus(props.todo)}
                         />
@@ -125,7 +124,6 @@ class TodosList extends Component {
                 <table align="center" className="table table-striped" style={{ marginTop: 10, width:"80%" }} >
                     <thead>
                     <tr align={"left"}>
-                        <th>Order</th>
                         <th>Name</th>
                         <th>Date Created</th>
                         <th>Due Date</th>
